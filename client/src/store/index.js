@@ -322,10 +322,8 @@ function GlobalStoreContextProvider(props) {
     store.deleteList = function (id) {
         async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
-            if (response.data.success) {
-                store.loadIdNamePairs();
-                history.push("/");
-            }
+            store.loadIdNamePairs();
+            history.push("/");
         }
         processDelete(id);
     }
@@ -333,6 +331,10 @@ function GlobalStoreContextProvider(props) {
         store.deleteList(store.listIdMarkedForDeletion);
         store.hideModals();
     }
+    store.unmarkListForDeletion=function(){
+        store.hideModals();
+    }
+    
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
 
