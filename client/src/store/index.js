@@ -258,6 +258,8 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+        // after close the currentlist, go back to homescreen
+        history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
