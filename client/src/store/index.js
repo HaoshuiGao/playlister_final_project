@@ -57,6 +57,7 @@ function GlobalStoreContextProvider(props) {
         listNameActive: false,
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null
+        
     });
     const history = useHistory();
 

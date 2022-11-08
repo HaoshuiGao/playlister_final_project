@@ -16,7 +16,9 @@ export const AuthActionType = {
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        errorFlag: false,
+        error:null
     });
     const history = useHistory();
 
@@ -36,7 +38,7 @@ function AuthContextProvider(props) {
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
                 })
             }
             case AuthActionType.LOGOUT_USER: {
@@ -48,7 +50,14 @@ function AuthContextProvider(props) {
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    
+                })
+            }
+            case AuthActionType.ERROR: {
+                return setAuth({
+                    error:payload.error,
+                    errorFlag:payload.errorFlag
                 })
             }
             default:
@@ -70,7 +79,8 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+        try{
+            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
@@ -80,21 +90,41 @@ function AuthContextProvider(props) {
             })
             history.push("/");
         }
-    }
-
-    auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
+        }
+        catch(err){
             authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
+                type: AuthActionType.ERROR,
+                payload:{
+                    error:err.response.data.errorMessage,
+                    errorFlag:true
                 }
             })
-            history.push("/");
         }
     }
 
+    auth.loginUser = async function(email, password) {
+        try{    
+            const response = await api.loginUser(email, password);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user,
+                    }
+                })
+                history.push("/");
+            }
+        }
+        catch(err){
+            authReducer({
+                type: AuthActionType.ERROR,
+                payload:{
+                    error:err.response.data.errorMessage,
+                    errorFlag:true
+                }
+            })
+        }
+    }
     auth.logoutUser = async function() {
         const response = await api.logoutUser();
         if (response.status === 200) {
@@ -115,7 +145,15 @@ function AuthContextProvider(props) {
         console.log("user initials: " + initials);
         return initials;
     }
-
+    auth.closeErrorModal=function(){
+        authReducer( {
+            type: AuthActionType.Error,
+            payload: {
+                errorFlag:false,
+                error:null
+            }
+        })
+    }
     return (
         <AuthContext.Provider value={{
             auth
