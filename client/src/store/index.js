@@ -260,7 +260,7 @@ function GlobalStoreContextProvider(props) {
         });
         tps.clearAllTransactions();
         // after close the currentlist, go back to homescreen
-        history.push("/");
+        // history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -279,6 +279,7 @@ function GlobalStoreContextProvider(props) {
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
             history.push("/playlist/" + newList._id);
+            history.push("/")
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");

@@ -32,6 +32,7 @@ const HomeScreen = () => {
 
     function handleCreateNewList() {
         store.createNewList();
+        
     }
     let listCard = "";
     if (store) {
@@ -118,6 +119,21 @@ const HomeScreen = () => {
             </Tabs>
             <TabPanel></TabPanel>
             
+            <div>
+            
+            <Typography variant="h2" style={{textAlign:'center'}}>Your List<Fab 
+                color="primary" 
+                aria-label="add"
+                id="add-list-button"
+                onClick={handleCreateNewList}
+            >
+                <AddIcon/>
+            </Fab></Typography>
+            <Typography>-</Typography>
+
+            </div>
+            
+                
             
             
             

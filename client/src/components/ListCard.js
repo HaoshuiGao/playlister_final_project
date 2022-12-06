@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
 
 import WorkspaceScreen from './WorkspaceScreen';
@@ -29,6 +30,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    
 
 
 
@@ -46,6 +48,10 @@ function ListCard(props) {
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
         }
+    }
+    
+    function handleCloseList(){
+        store.closeCurrentList();
     }
 
     function handleToggleEdit(event) {
@@ -99,9 +105,9 @@ function ListCard(props) {
             // }
             
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} By:{idNamePair.username}</Box>
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} <br></br> {idNamePair.username}
             
-            {/* <Box sx={{ p: 1 }}>
+            <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
                     <EditIcon style={{fontSize:'40pt'}} />
                 </IconButton>
@@ -112,11 +118,23 @@ function ListCard(props) {
                     }} aria-label='delete'>
                     <DeleteIcon style={{fontSize:'40pt'}} />
                 </IconButton>
-            </Box> */}
-            <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>
-            <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }}/>
-
-            <Accordion >
+            </Box>
+            {/* <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>
+            <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }}/> */}
+            <IconButton>
+            <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}/></IconButton>
+            <IconButton>
+            <KeyboardDoubleArrowUpIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
+                handleCloseList()
+            }}/></IconButton>
+            <Box>
+            {(store.currentList?(store.currentList._id==idNamePair._id?<WorkspaceScreen />:null):null)}
+            </Box>
+            </Box>
+            
+            {/* <Accordion >
             <AccordionSummary>
             <IconButton>
             <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow' }} onClick={(event) => {
@@ -125,11 +143,11 @@ function ListCard(props) {
             </IconButton>
             </AccordionSummary>
             <AccordionDetails>
-                <div>
-                    {store.currentList?<WorkspaceScreen/>:null}
-                </div>
+                
+                    {(store.currentList?(store.currentList._id==idNamePair._id?<WorkspaceScreen height="300px"/>:null):null)}
+                
             </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
         
             
 
