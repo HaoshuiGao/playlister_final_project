@@ -83,10 +83,14 @@ body {
   grid-column: 1 / 3;
   grid-row: 2 / 3;
   display:grid;
-  background-color: var(--swatch-primary);
-  font-size: 40pt;
+  background-color: lightgray;
+  font-size: 20pt;
 }
-
+#list-selector-list{
+  overflow: scroll;
+  background-color: #00b0ff;
+  
+}
 .playlister-button, .playlister-button-disabled {
   font-size:36pt;
   border-width: 0px;

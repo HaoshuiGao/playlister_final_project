@@ -6,6 +6,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+
+
+import WorkspaceScreen from './WorkspaceScreen';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -20,6 +30,10 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
 
+
+
+
+    
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -78,25 +92,47 @@ function ListCard(props) {
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '48pt' }}
-            button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
+            style={{ width: '100%', fontSize: '25pt' , border: '2px solid #999999', background:'lightyellow'}}
+            // onClick={(event) => {
+            //     handleLoadList(event, idNamePair._id)
+            //     }
+            // }
+            
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} By:{idNamePair.username}</Box>
+            
+            {/* <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
+                    <EditIcon style={{fontSize:'40pt'}} />
                 </IconButton>
             </Box>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
                     }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
+                    <DeleteIcon style={{fontSize:'40pt'}} />
                 </IconButton>
-            </Box>
+            </Box> */}
+            <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>
+            <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }}/>
+
+            <Accordion >
+            <AccordionSummary>
+            <IconButton>
+            <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow' }} onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}/>
+            </IconButton>
+            </AccordionSummary>
+            <AccordionDetails>
+                <div>
+                    {store.currentList?<WorkspaceScreen/>:null}
+                </div>
+            </AccordionDetails>
+            </Accordion>
+        
+            
+
         </ListItem>
 
     if (editActive) {
