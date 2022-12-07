@@ -252,7 +252,38 @@ function GlobalStoreContextProvider(props) {
         }
         asyncChangeListName(id);
     }
-
+    //handle comment for designated list
+    store.commentList = function (id, username, comment) {
+        // get the id of unpublished list and publish it
+        async function asyncCommentList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                //record the publish date and make it state to true
+                playlist.comment.push({username, comment})
+                //playlist.name = newName;
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncCommentList(id);
+    }
+    //handle publish for designated list
     store.publishList = function (id) {
         // get the id of unpublished list and publish it
         async function asyncPublishList(id) {
@@ -285,6 +316,8 @@ function GlobalStoreContextProvider(props) {
         asyncPublishList(id);
     }
 
+    
+
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
         storeReducer({
@@ -299,7 +332,7 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        const response = await api.createPlaylist(newListName, [], auth.user.email,[]);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();

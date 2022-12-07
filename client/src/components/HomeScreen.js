@@ -18,6 +18,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
 import WorkspaceScreen from './WorkspaceScreen';
+import { Box } from '@mui/material';
+import AuthContext from '../auth';
+import CommentArea from './CommentArea';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -25,7 +28,7 @@ import WorkspaceScreen from './WorkspaceScreen';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-
+    const { auth } = useContext(AuthContext);
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -33,6 +36,14 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
         
+    }
+    function handleCommentList(event){
+        if(event.code=="Enter"){
+            let comment=event.target.value
+            store.commentList(store.currentList._id,auth.user.firstName+" " +auth.user.lastName,comment)
+
+        }
+
     }
     let listCard = "";
     if (store) {
@@ -75,6 +86,13 @@ const HomeScreen = () => {
             
         )
         else if(value=="2")
+        // let commentCard="";
+        // if(store.currentList){
+        // commentCard=store.currentList?store.currentList.comment.map(pair=>(
+        //     {pair.username}
+        //     {pair.comment}
+        // ))
+        // }
          return(
             <Grid container spacing={0}>
             <Grid item xs={7}>
@@ -87,10 +105,22 @@ const HomeScreen = () => {
             </Grid>
             
             <Grid item xs={5}> 
+            <Box>
+            {
+                store.currentList?store.currentList.comment.map((pair) => (
+                    <CommentArea
+                        username={pair.username}
+                        comment={pair.comment}
+                    />
+                )):null
+            }
+                
+
+
+            </Box>
             
             
-            
-            <TextField>Comment</TextField>
+            <TextField fullWidth onKeyDown={handleCommentList} placeholder={"Comment"}>Comment</TextField>
              </Grid>
             
             </Grid>
