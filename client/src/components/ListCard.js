@@ -82,6 +82,18 @@ function ListCard(props) {
     function handleUpdateText(event) {
         setText(event.target.value);
     }
+    function handleLike(event, id){
+        event.stopPropagation();
+        let _id = event.target.id;
+        _id = ("" + _id).substring("like-list-".length);
+        store.likeList(id)
+    }
+    function handleDislike(event, id){
+        event.stopPropagation();
+        let _id = event.target.id;
+        _id = ("" + _id).substring("like-list-".length);
+        store.dislikeList(id);
+    }
     
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -109,7 +121,7 @@ function ListCard(props) {
         >
             {console.log("idnamepair is "+idNamePair.publishDate)}
             
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} 
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}{<br></br>} by: {auth.user.firstName+" " +auth.user.lastName} 
             
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
@@ -125,8 +137,10 @@ function ListCard(props) {
             <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
                  {idNamePair.publishDate?"Publish Date:"+idNamePair.publishDate.substring(0,10):null}
             </Box>
-            {/* <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>
-            <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }}/> */}
+            <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }} id='like-list-button'
+                onClick={(event)=>{handleLike(event, idNamePair._id)}}/> {idNamePair.like}
+            <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }} id='dislike-list-button'
+                onClick={(event)=>{handleDislike(event, idNamePair._id)}}/>{idNamePair.dislike}
             <IconButton>
             <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
                 handleLoadList(event, idNamePair._id)

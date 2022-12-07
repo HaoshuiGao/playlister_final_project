@@ -13,6 +13,8 @@ const playlistSchema = new Schema(
         comment:{type:[{username:String, comment:String}], required:true},
         publish:{type:Boolean, required:true},
         publishDate:{type:Date, required:false},
+        like:{type:Number,required:false},
+        dislike:{type:Number,required:false},
         songs: { type: [{
             title: String,
             artist: String,

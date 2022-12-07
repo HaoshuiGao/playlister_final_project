@@ -316,6 +316,74 @@ function GlobalStoreContextProvider(props) {
         asyncPublishList(id);
     }
 
+    //handle like for designated list
+    store.likeList = function (id) {
+        // get the id of unpublished list and publish it
+        async function asyncLikeList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                if(playlist.like){
+                    let number=playlist.like+1;
+                    playlist.like=number
+                    }
+                    else{playlist.like=1}
+                //playlist.name = newName;
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncLikeList(id);
+    }
+    //handle like for designated list
+    store.dislikeList = function (id) {
+        // get the id of unpublished list and publish it
+        async function asyncdislikeList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                if(playlist.dislike){
+                let number=playlist.dislike+1;
+                playlist.dislike=number
+                }
+                else{playlist.dislike=1}
+                //playlist.name = newName;
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncdislikeList(id);
+    }
     
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
