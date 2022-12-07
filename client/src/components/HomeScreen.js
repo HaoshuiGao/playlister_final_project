@@ -86,7 +86,12 @@ const HomeScreen = () => {
             </div>
             </Grid>
             
-            <Grid item xs={5}> Comment test </Grid>
+            <Grid item xs={5}> 
+            
+            
+            
+            <TextField>Comment</TextField>
+             </Grid>
             
             </Grid>
          )

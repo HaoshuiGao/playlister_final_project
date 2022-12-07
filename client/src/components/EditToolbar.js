@@ -27,8 +27,17 @@ function EditToolbar() {
     function handleClose() {
         store.closeCurrentList();
     }
+    function handlePublish(){
+        store.publishList(store.currentList._id);
+    }
     return (
         <div id="edit-toolbar">
+            <Button
+                id='publish-list-button'
+                onClick={handlePublish}
+                variant="contained">
+                PUBLISH
+            </Button>
             <Button
                 disabled={!store.canAddNewSong()}
                 id='add-song-button'

@@ -16,7 +16,7 @@ import WorkspaceScreen from './WorkspaceScreen';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-
+import AuthContext from '../auth';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -30,7 +30,8 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
-    
+    const { auth } = useContext(AuthContext);
+
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -106,6 +107,7 @@ function ListCard(props) {
             //     aria-label='edit' 
             
         >
+            {console.log("idnamepair is "+idNamePair.publishDate)}
             
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} 
             
@@ -119,6 +121,9 @@ function ListCard(props) {
                     }} aria-label='delete'>
                     <DeleteIcon style={{fontSize:'20pt'}} />
                 </IconButton>
+            </Box>
+            <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
+                 {idNamePair.publishDate?"Publish Date:"+idNamePair.publishDate.substring(0,10):null}
             </Box>
             {/* <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>
             <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }}/> */}
