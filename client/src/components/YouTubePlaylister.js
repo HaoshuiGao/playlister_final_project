@@ -16,18 +16,32 @@ import Button from '@mui/material/Button';
 
 export default function YouTubePlayerExample() {
     const { store } = useContext(GlobalStoreContext);
+    const [nowPlayingindex,setNowPlayingIndex]= useState(0) 
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
     let player;
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
+    let playlist = [];
+    let playlistTitle=[];
+    let playlistArtist=[];
+    let playlistIndex=[];
+    let playListName;
+    
 
+    if(store.currentList){
+    for(let i=0; i<store.getPlaylistSize();i++){
+        playlist[i]=store.currentList.songs[i].youTubeId
+        playlistTitle[i]=store.currentList.songs[i].title
+        playlistArtist[i]=store.currentList.songs[i].artist
+        playlistIndex[i]=i+1
+    }
+
+    playListName=store.currentList.name
+    }
+    
+    // console.log("playlist"+ playlist)
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
 
@@ -43,15 +57,27 @@ export default function YouTubePlayerExample() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = playlist[nowPlayingindex];
         player.loadVideoById(song);
         player.playVideo();
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
-        currentSong = currentSong % playlist.length;
+        // currentSong++;
+        // currentSong = currentSong % playlist.length;
+        // setNowPlayingIndex(currentSong)
+        //replace currentSong with nowPlayingIndex
+        let index = nowPlayingindex+1
+        console.log("playlist length is "+playlist.length)
+        console.log("songindex is "+ index)
+        //
+        if(index==playlist.length){
+            index=playlist.length-1
+        }
+
+        index=index % playlist.length;
+        setNowPlayingIndex(index);
     }
     
     function onPlayerReady(event) {
@@ -71,8 +97,12 @@ export default function YouTubePlayerExample() {
 
     }
     function handleFastRewind(event){
-        currentSong--;
-        currentSong = currentSong % playlist.length;
+        let index=nowPlayingindex-1;
+        if(index<0){
+            index=0
+        }
+        index = index % playlist.length;
+        setNowPlayingIndex(index);
         loadAndPlayCurrentSong(player)
 
     }
@@ -106,19 +136,19 @@ export default function YouTubePlayerExample() {
             console.log("5 Video cued");
         }
     }
-
+    
     return <div>
         <YouTube 
-        videoId={playlist[currentSong]}
+        videoId={playlist[nowPlayingindex]}
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />
         <Box>
         <Card align="center">Now Playing</Card>
-        <Card>Playlist:</Card>
-        <Card>Title:</Card>
-        <Card>Song#:</Card>
-        <Card>Artist:</Card>
+        <Card>Playlist: {playListName}</Card>
+        <Card>Title:{playlistTitle[nowPlayingindex]}</Card>
+        <Card>Song#:{playlistIndex[nowPlayingindex]}</Card>
+        <Card>Artist:{playlistArtist[nowPlayingindex]}</Card>
         <Card align="center">
         <Button>
                 <FastRewindIcon style={{fontSize:'40px'}} onClick={handleFastRewind}/>

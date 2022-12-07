@@ -31,11 +31,6 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
     
-
-
-
-
-    
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -56,11 +51,13 @@ function ListCard(props) {
 
     function handleToggleEdit(event) {
         event.stopPropagation();
+        console.log("event is"+ event)
         toggleEdit();
     }
 
     function toggleEdit() {
         let newActive = !editActive;
+        console.log("tolgge")
         if (newActive) {
             store.setIsListNameEditActive();
         }
@@ -84,7 +81,7 @@ function ListCard(props) {
     function handleUpdateText(event) {
         setText(event.target.value);
     }
-
+    
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -99,24 +96,28 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
             style={{ width: '100%', fontSize: '25pt' , border: '2px solid #999999', background:'lightyellow'}}
+            className = {"playlist-card"}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             //     }
             // }
+            // onDoubleClick= {(event) => {
+            //     handleToggleEdit(event)}}
+            //     aria-label='edit' 
             
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} <br></br> {idNamePair.username}
+            
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} 
             
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'40pt'}} />
+                    <EditIcon style={{fontSize:'20pt'}} />
                 </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
+                        console.log("event is"+ event)
                     }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'40pt'}} />
+                    <DeleteIcon style={{fontSize:'20pt'}} />
                 </IconButton>
             </Box>
             {/* <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }}/>

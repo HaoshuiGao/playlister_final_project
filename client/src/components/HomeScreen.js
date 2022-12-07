@@ -49,14 +49,14 @@ const HomeScreen = () => {
             }
             </List>;
     }
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState("1");
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
     function TabPanel(){
         console.log(value)
-        if(value=='0')
+        if(value=="1")
         
          return(<Grid container spacing={0}>
             <Grid item xs={7}>
@@ -74,7 +74,7 @@ const HomeScreen = () => {
             </Grid>
             
         )
-        if(value=='1')
+        else if(value=="2")
          return(
             <Grid container spacing={0}>
             <Grid item xs={7}>
@@ -110,10 +110,10 @@ const HomeScreen = () => {
 
             
             <Tabs value={value} onChange={handleChange} >
-                <Tab label="Player" value="0"  sx={{left:900,}}>
+                <Tab label="Player" value="1"  sx={{left:900,}}>
                     
                 </Tab>
-                <Tab label="Comment" value="1" sx={{left:900,}}>
+                <Tab label="Comment" value="2" sx={{left:900,}}>
                     
                 </Tab>
             </Tabs>
