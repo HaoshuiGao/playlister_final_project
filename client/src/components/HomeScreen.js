@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -21,6 +21,8 @@ import WorkspaceScreen from './WorkspaceScreen';
 import { Box } from '@mui/material';
 import AuthContext from '../auth';
 import CommentArea from './CommentArea';
+import Button from '@mui/material/Button';
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -29,6 +31,9 @@ import CommentArea from './CommentArea';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const [modeState,setModeState]= useState("home");
+
+    
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -45,8 +50,15 @@ const HomeScreen = () => {
         }
 
     }
+    function handleChangeAllUser(){
+        setModeState("allUser")
+    }
+    function handleChangeHome(){
+        setModeState("home")
+    }
     let listCard = "";
     if (store) {
+        if(modeState=="home"){
         listCard = 
             <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
             {
@@ -59,6 +71,48 @@ const HomeScreen = () => {
                 ))
             }
             </List>;
+        }
+        else if(modeState=="allUser"){
+            listCard = 
+                <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+                {
+                    store.idNamePairs.filter(pair => pair.publishDate).map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                }
+                </List>;
+            }
+        else if(modeState=="user"){
+                listCard = 
+                    <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+                    {
+                        store.idNamePairs.filter(pair => pair.publishDate).map((pair) => (
+                            <ListCard
+                                key={pair._id}
+                                idNamePair={pair}
+                                selected={false}
+                            />
+                        ))
+                    }
+                    </List>;
+                }
+        else{listCard = 
+            <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+            {
+                store.idNamePairs.map((pair) => (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                    />
+                ))
+            }
+            </List>;
+        }
     }
     const [value, setValue] = React.useState("1");
 
@@ -130,9 +184,9 @@ const HomeScreen = () => {
     return (
         <div id="playlist-selector">
             <Grid container spacing={0}>
-            <Grid item xs={0.6}><HomeIcon style={{fontSize:'50px'}}/></Grid>
-            <Grid item xs={0.6}><PersonIcon style={{fontSize:'50px'}}/></Grid>
-            <Grid item xs={0.6}><GroupsIcon style={{fontSize:'50px'}}/></Grid>
+            <Grid item xs={0.6}><Button onClick={handleChangeHome} ><HomeIcon style={{fontSize:'50px'}}  /> </Button></Grid>
+            <Grid item xs={0.6}><Button ><PersonIcon style={{fontSize:'50px'}} /></Button></Grid>
+            <Grid item xs={0.6}><Button onClick={handleChangeAllUser}><GroupsIcon style={{fontSize:'50px'}} /></Button></Grid>
             <Grid item xs={5}>
             <TextField
                 id="search" 

@@ -67,7 +67,7 @@ function GlobalStoreContextProvider(props) {
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
     console.log("auth: " + auth);
-
+    
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
@@ -383,6 +383,41 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncdislikeList(id);
+    }
+
+    //handle like for designated list
+    store.listenList = function (id) {
+        // get the id of unpublished list and publish it
+        async function asyncListen(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                if(playlist.listen){
+                let number=playlist.listen+1;
+                playlist.listen=number
+                }
+                else{playlist.listen=1}
+                //playlist.name = newName;
+                // async function updateList(playlist) {
+                //     response = await api.updatePlaylistById(playlist._id, playlist);
+                //     if (response.data.success) {
+                //         async function getListPairs(playlist) {
+                //             response = await api.getPlaylistPairs();
+                //             if (response.data.success) {
+                //                 let pairsArray = response.data.idNamePairs;
+                //                 storeReducer({
+                //                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                //                     payload: pairsArray
+                //                 });
+                //             }
+                //         }
+                //         getListPairs(playlist);
+                //     }
+                // }
+                // updateList(playlist);
+            }
+        }
+        asyncListen(id);
     }
     
 

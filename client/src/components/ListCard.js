@@ -94,6 +94,12 @@ function ListCard(props) {
         _id = ("" + _id).substring("like-list-".length);
         store.dislikeList(id);
     }
+    function handleListen(event, id){
+        event.stopPropagation();
+        let _id = event.target.id;
+        _id = ("" + _id).substring("like-list-".length);
+        store.listenList(id);
+    }
     
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -137,14 +143,18 @@ function ListCard(props) {
             <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
                  {idNamePair.publishDate?"Publish Date:"+idNamePair.publishDate.substring(0,10):null}
             </Box>
+            <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
+                 {idNamePair.listen?"Listen:"+idNamePair.listen:null}
+            </Box>
+
             <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }} id='like-list-button'
                 onClick={(event)=>{handleLike(event, idNamePair._id)}}/> {idNamePair.like}
             <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }} id='dislike-list-button'
                 onClick={(event)=>{handleDislike(event, idNamePair._id)}}/>{idNamePair.dislike}
             <IconButton>
             <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}/></IconButton>
+                handleListen(event, idNamePair._id); handleLoadList(event, idNamePair._id)
+            }} /></IconButton>
             <IconButton>
             <KeyboardDoubleArrowUpIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
                 handleCloseList()
