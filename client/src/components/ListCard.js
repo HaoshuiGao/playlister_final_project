@@ -40,9 +40,10 @@ function ListCard(props) {
                 _id = ("" + _id).substring("list-card-text-".length);
 
             console.log("load " + event.target.id);
-
+            // handleListen(event, idNamePair._id)
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
+            
         }
     }
     
@@ -125,7 +126,7 @@ function ListCard(props) {
             //     aria-label='edit' 
             
         >
-            {console.log("idnamepair is "+idNamePair.publishDate)}
+            {/* {console.log("idnamepair is "+idNamePair.publishDate)} */}
             
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}{<br></br>} by: {auth.user.firstName+" " +auth.user.lastName} 
             
@@ -153,7 +154,7 @@ function ListCard(props) {
                 onClick={(event)=>{handleDislike(event, idNamePair._id)}}/>{idNamePair.dislike}
             <IconButton>
             <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
-                handleListen(event, idNamePair._id); handleLoadList(event, idNamePair._id)
+                 handleLoadList(event, idNamePair._id)
             }} /></IconButton>
             <IconButton>
             <KeyboardDoubleArrowUpIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {

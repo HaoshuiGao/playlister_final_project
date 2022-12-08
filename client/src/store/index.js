@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
-import api from './store-request-api'
+import api, { getPlaylistPairs } from './store-request-api'
 import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
@@ -392,29 +392,30 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
+                console.log("listen is before "+playlist.listen)
                 if(playlist.listen){
-                let number=playlist.listen+1;
-                playlist.listen=number
+                playlist.listen++
                 }
                 else{playlist.listen=1}
-                //playlist.name = newName;
-                // async function updateList(playlist) {
-                //     response = await api.updatePlaylistById(playlist._id, playlist);
-                //     if (response.data.success) {
-                //         async function getListPairs(playlist) {
-                //             response = await api.getPlaylistPairs();
-                //             if (response.data.success) {
-                //                 let pairsArray = response.data.idNamePairs;
-                //                 storeReducer({
-                //                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                //                     payload: pairsArray
-                //                 });
-                //             }
-                //         }
-                //         getListPairs(playlist);
-                //     }
-                // }
-                // updateList(playlist);
+                console.log("listen is after "+playlist.listen)
+                
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: pairsArray
+                                });
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
             }
         }
         asyncListen(id);
@@ -547,6 +548,10 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.publish=false;
+                if(playlist.listen){
+                    playlist.listen++
+                    }
+                    else{playlist.listen=1}
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
                     storeReducer({
