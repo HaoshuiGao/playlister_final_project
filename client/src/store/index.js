@@ -421,6 +421,34 @@ function GlobalStoreContextProvider(props) {
         asyncListen(id);
     }
     
+    //duplicate the
+    store.duplicateList = function (id) {
+        async function asyncDuplicateList() {
+          let response = await api.getPlaylistById(id);
+          if (response.data.success) {
+            let playlist = response.data.playlist
+            let newListName = "Untitled" + store.newListCounter;
+            let username=auth.user.firstName+" "+auth.user.lastName;
+            response = await api.createPlaylist(playlist.name, playlist.songs, playlist.ownerEmail,username,playlist.comment);
+            if (response.status === 201) {
+              tps.clearAllTransactions();
+              let newList = playlist;
+              let result = await api.getPlaylistPairs();
+              if (result.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
+                    payload: newList
+                }
+                );
+              }
+              // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                history.push("/playlist/" + newList._id);
+                history.push("/")
+            }
+          }
+        }
+        asyncDuplicateList(id);
+      };
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {

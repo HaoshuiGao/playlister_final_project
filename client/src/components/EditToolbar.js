@@ -30,12 +30,17 @@ function EditToolbar() {
     function handlePublish(){
         store.publishList(store.currentList._id);
     }
+    function handleDuplicateList(){
+        store.duplicateList(store.currentList._id)
+    }
     return (
         <div id="edit-toolbar">
             
             <Button
                 id='duplicate-list-button'
-                variant="contained">
+                variant="contained"
+                onClick={handleDuplicateList}
+                >
                 Duplicate
             </Button>
             <Button
