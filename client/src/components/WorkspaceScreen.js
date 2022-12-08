@@ -42,6 +42,7 @@ function WorkspaceScreen() {
             }
          </List>            
          { modalJSX }
+         
          <EditToolbar/>
          </Box>
          

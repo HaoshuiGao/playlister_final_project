@@ -13,9 +13,7 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 
 
 import WorkspaceScreen from './WorkspaceScreen';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+
 import AuthContext from '../auth';
 
 /*
@@ -110,7 +108,9 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-    let cardElement =
+    let cardElement;
+    if(idNamePair.publishDate){
+    cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
@@ -145,9 +145,9 @@ function ListCard(props) {
                  {idNamePair.publishDate?"Publish Date:"+idNamePair.publishDate.substring(0,10):null}
             </Box>
             <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
-                 {idNamePair.listen?"Listen:"+idNamePair.listen:null}
+                 {idNamePair.publishDate?(idNamePair.listen?"Listen:"+idNamePair.listen:null):null}
             </Box>
-
+                    
             <ThumbUpIcon sx={{ p: 1, flexGrow: 1 }} id='like-list-button'
                 onClick={(event)=>{handleLike(event, idNamePair._id)}}/> {idNamePair.like}
             <ThumbDownIcon sx={{ p: 1, flexGrow: 1 }} id='dislike-list-button'
@@ -183,7 +183,65 @@ function ListCard(props) {
             
 
         </ListItem>
+    }
 
+    else{
+        cardElement =
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            style={{ width: '100%', fontSize: '25pt' , border: '2px solid #999999', background:'lightyellow'}}
+            className = {"playlist-card"}
+            // onClick={(event) => {
+            //     handleLoadList(event, idNamePair._id)
+            //     }
+            // }
+            // onDoubleClick= {(event) => {
+            //     handleToggleEdit(event)}}
+            //     aria-label='edit' 
+            
+        >
+            {/* {console.log("idnamepair is "+idNamePair.publishDate)} */}
+            
+            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}{<br></br>} by: {auth.user.firstName+" " +auth.user.lastName} 
+            
+            <Box sx={{ p: 1 }}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                    <EditIcon style={{fontSize:'20pt'}} />
+                </IconButton>
+                <IconButton onClick={(event) => {
+                        handleDeleteList(event, idNamePair._id)
+                        console.log("event is"+ event)
+                    }} aria-label='delete'>
+                    <DeleteIcon style={{fontSize:'20pt'}} />
+                </IconButton>
+            </Box>
+            <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
+                 {idNamePair.publishDate?"Publish Date:"+idNamePair.publishDate.substring(0,10):null}
+            </Box>
+            <Box sx={{ p: 1 }} style={{fontSize:'12pt'}}>
+                 {idNamePair.publishDate?(idNamePair.listen?"Listen:"+idNamePair.listen:null):null}
+            </Box>
+                    
+            
+            <IconButton>
+            <KeyboardDoubleArrowDownIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
+                 handleLoadList(event, idNamePair._id)
+            }} /></IconButton>
+            <IconButton>
+            <KeyboardDoubleArrowUpIcon sx={{ p: 1, flexGrow: 1 ,bgcolor:'lightyellow',left:'50%' }} onClick={(event) => {
+                handleCloseList()
+            }}/></IconButton>
+            <Box>
+            {(store.currentList?(store.currentList._id==idNamePair._id?<WorkspaceScreen />:null):null)}
+            </Box>
+            </Box>
+    
+        </ListItem>
+        
+
+    }
     if (editActive) {
         cardElement =
             <TextField

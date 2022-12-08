@@ -32,40 +32,48 @@ function EditToolbar() {
     }
     return (
         <div id="edit-toolbar">
+            
+            <Button
+                id='duplicate-list-button'
+                variant="contained">
+                Duplicate
+            </Button>
             <Button
                 id='publish-list-button'
+                disabled={(store.currentList.publishDate?true:false)}
                 onClick={handlePublish}
                 variant="contained">
                 PUBLISH
             </Button>
             <Button
-                disabled={!store.canAddNewSong()}
+                //disabled={(!store.canAddNewSong()) && (store.currentList.publishDate?true:false)}
+                disabled={(store.currentList.publishDate?true:(!store.canAddNewSong()))}
                 id='add-song-button'
                 onClick={handleAddNewSong}
                 variant="contained">
                 <AddIcon />
             </Button>
             <Button 
-                disabled={!store.canUndo()}
+                disabled={(store.currentList.publishDate?true:(!store.canUndo()))}
                 id='undo-button'
                 onClick={handleUndo}
                 variant="contained">
                     <UndoIcon />
             </Button>
             <Button 
-                disabled={!store.canRedo()}
+                disabled={(store.currentList.publishDate?true:(!store.canRedo()))}
                 id='redo-button'
                 onClick={handleRedo}
                 variant="contained">
                     <RedoIcon />
             </Button>
-            <Button 
+            {/* <Button 
                 disabled={!store.canClose()}
                 id='close-button'
                 onClick={handleClose}
                 variant="contained">
                     <CloseIcon />
-            </Button>
+            </Button> */}
         </div>
     )
 }

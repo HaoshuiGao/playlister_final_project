@@ -549,10 +549,12 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.publish=false;
+                if(playlist.publishDate){
                 if(playlist.listen){
                     playlist.listen++
                     }
                     else{playlist.listen=1}
+                }
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
                     storeReducer({
