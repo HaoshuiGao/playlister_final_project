@@ -32,6 +32,7 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
     const [modeState,setModeState]= useState("home");
+    const [searchWord, setSearchState]=useState("");
 
     
     useEffect(() => {
@@ -50,15 +51,27 @@ const HomeScreen = () => {
         }
 
     }
+    function handleSearch(event){
+        if(event.code=="Enter"){
+            let searchWord=event.target.value
+            setSearchState(searchWord)
+        }
+    }
     function handleChangeAllUser(){
         setModeState("allUser")
+        setSearchState("")
     }
     function handleChangeHome(){
         setModeState("home")
+        setSearchState("")
+    }
+    function handleChangeUser(){
+        setModeState("user")
+        setSearchState("")
     }
     let listCard = "";
     if (store) {
-        if(modeState=="home"){
+        if(modeState=="home" && searchWord==""){
         listCard = 
             <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
             {
@@ -72,7 +85,21 @@ const HomeScreen = () => {
             }
             </List>;
         }
-        else if(modeState=="allUser"){
+        else if(modeState=="home" && searchWord!=""){
+            listCard = 
+            <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+            {
+                store.idNamePairs.filter(pair=>pair.name==searchWord).map((pair) => (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                    />
+                ))
+            }
+            </List>;
+        }
+        else if(modeState=="allUser"  && searchWord==""){
             listCard = 
                 <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
                 {
@@ -86,11 +113,39 @@ const HomeScreen = () => {
                 }
                 </List>;
             }
-        else if(modeState=="user"){
+        else if(modeState=="allUser" && searchWord!=""){
+                listCard = 
+                <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+                {
+                    store.idNamePairs.filter(pair => pair.publishDate).filter(pair=>pair.name==searchWord).map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                }
+                </List>;
+            }
+        else if(modeState=="user"  && searchWord==""){
                 listCard = 
                     <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
                     {
                         store.idNamePairs.filter(pair => pair.publishDate).map((pair) => (
+                            <ListCard
+                                key={pair._id}
+                                idNamePair={pair}
+                                selected={false}
+                            />
+                        ))
+                    }
+                    </List>;
+                }
+        else if(modeState=="user" && searchWord!=""){
+                    listCard = 
+                    <List sx={{ width: '90%', left: '5%', bgcolor: '#00b0ff' }}>
+                    {   
+                        store.idNamePairs.filter(pair => pair.publishDate).filter(pair=>pair.username==searchWord).map((pair) => (
                             <ListCard
                                 key={pair._id}
                                 idNamePair={pair}
@@ -185,10 +240,10 @@ const HomeScreen = () => {
         <div id="playlist-selector">
             <Grid container spacing={0}>
             <Grid item xs={0.6}><Button onClick={handleChangeHome} ><HomeIcon style={{fontSize:'50px'}}  /> </Button></Grid>
-            <Grid item xs={0.6}><Button ><PersonIcon style={{fontSize:'50px'}} /></Button></Grid>
+            <Grid item xs={0.6}><Button onClick={handleChangeUser}><PersonIcon style={{fontSize:'50px'}} /></Button></Grid>
             <Grid item xs={0.6}><Button onClick={handleChangeAllUser}><GroupsIcon style={{fontSize:'50px'}} /></Button></Grid>
             <Grid item xs={5}>
-            <TextField
+            <TextField onKeyDown={handleSearch}
                 id="search" 
                 label="Search" type="search" style={{fontSize:'40px', left:'100px', width:'80%'}}
                 />

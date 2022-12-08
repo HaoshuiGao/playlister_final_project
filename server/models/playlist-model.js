@@ -16,6 +16,7 @@ const playlistSchema = new Schema(
         like:{type:Number,required:false},
         dislike:{type:Number,required:false},
         listen:{type:Number,required:false},
+        username:{type: String, required: true},
         songs: { type: [{
             title: String,
             artist: String,
